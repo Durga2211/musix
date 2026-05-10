@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Musix - A clean, modern music player powered by YouTube">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#ffffff">
+  <title>MUSIX — Player</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- ═══════════════════════════════════════════
+         PAGE 1: MAIN PLAYER PAGE
+         ═══════════════════════════════════════════ -->
+    <div id="page-player" class="page active">
+
+      <!-- Top Nav Bar -->
+      <nav id="nav-bar">
+        <button id="nav-library-btn" onclick="switchPage('library')" aria-label="Library">
+          LIBRARY
+        </button>
+      </nav>
+
+      <!-- Search Bar -->
+      <div id="search-container">
+        <div id="search-wrapper">
+          <svg id="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" id="search-input" placeholder="Search" autocomplete="off">
+          <div id="search-spinner" class="hidden">
+            <div class="spinner"></div>
+          </div>
+          <button id="search-clear" class="hidden" aria-label="Clear search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Search Results -->
+      <div id="search-results" class="hidden">
+        <div id="results-list"></div>
+      </div>
+
+      <!-- Player Section (always visible, blank when no song) -->
+      <div id="player-section">
+        <!-- Album Art -->
+        <div id="album-art-container">
+          <img id="album-art" src="" alt="Album Art">
+          <div id="album-art-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+              <path d="M9 18V5l12-2v13"/>
+              <circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Song Info -->
+        <div id="song-info">
+          <h2 id="song-title">&nbsp;</h2>
+          <p id="song-artist">&nbsp;</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div id="progress-container">
+          <div id="progress-bar-wrapper">
+            <div id="progress-bar">
+              <div id="progress-fill"></div>
+              <div id="progress-thumb"></div>
+            </div>
+          </div>
+          <div id="time-display">
+            <span id="current-time">0:00</span>
+            <span id="total-time">0:00</span>
+          </div>
+        </div>
+
+        <!-- Playback Controls -->
+        <div id="controls">
+          <button id="btn-shuffle" class="control-btn" aria-label="Shuffle" title="Shuffle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/>
+              <polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/>
+              <line x1="4" y1="4" x2="9" y2="9"/>
+            </svg>
+          </button>
+          <button id="btn-prev" class="control-btn" aria-label="Previous" title="Previous">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+            </svg>
+          </button>
+          <button id="btn-play" class="control-btn play-btn" aria-label="Play" title="Play">
+            <svg id="icon-play" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+            <svg id="icon-pause" viewBox="0 0 24 24" fill="currentColor" class="hidden">
+              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+            </svg>
+          </button>
+          <button id="btn-next" class="control-btn" aria-label="Next" title="Next">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+            </svg>
+          </button>
+          <button id="btn-repeat" class="control-btn" aria-label="Repeat" title="Repeat">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+              <polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Volume Control -->
+        <div id="volume-container">
+          <button id="btn-volume" aria-label="Mute" title="Volume">
+            <svg id="icon-volume-on" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+            </svg>
+            <svg id="icon-volume-mute" viewBox="0 0 24 24" fill="currentColor" class="hidden">
+              <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+            </svg>
+          </button>
+          <div id="volume-slider-wrapper">
+            <div id="volume-slider">
+              <div id="volume-fill"></div>
+              <div id="volume-thumb"></div>
+            </div>
+          </div>
+          <button id="btn-volume-max" aria-label="Max volume" title="Max Volume">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         PAGE 2: LIBRARY PAGE
+         ═══════════════════════════════════════════ -->
+    <div id="page-library" class="page">
+
+      <!-- Library Nav Bar -->
+      <nav id="library-nav-bar">
+        <button id="nav-back-btn" onclick="switchPage('player')" aria-label="Back to Player">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"/>
+            <polyline points="12 19 5 12 12 5"/>
+          </svg>
+        </button>
+        <span id="library-nav-title">LIBRARY</span>
+        <span id="library-count"></span>
+      </nav>
+
+      <!-- Library Songs -->
+      <div id="library-content">
+        <div id="library-items"></div>
+      </div>
+    </div>
+
+    <!-- Loading overlay -->
+    <div id="loading-overlay" class="hidden">
+      <div class="loading-content">
+        <div class="loading-spinner"></div>
+        <p>Loading track...</p>
+      </div>
+    </div>
+
+    <!-- Glassmorphism Toast notifications -->
+    <div id="toast-container"></div>
+  </div>
+
+  <!-- Audio element (hidden) -->
+  <audio id="audio-player" preload="auto"></audio>
+
+  <script src="app.js"></script>
+</body>
+</html>
