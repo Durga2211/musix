@@ -1,5 +1,5 @@
 /** MUSIX — Two-Page Frontend App */
-const API_BASE = 'https://musix-pogx.onrender.com/';
+const API_BASE = 'https://musix-pogx.onrender.com/api';
 
 const state = {
   library: [], searchResults: [], currentSong: null, currentIndex: -1,
